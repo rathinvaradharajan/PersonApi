@@ -1,0 +1,57 @@
+{
+  "consumer": {
+    "name": "PersonUi"
+  },
+  "provider": {
+    "name": "personApi"
+  },
+  "interactions": [
+    {
+      "description": "a request for all users",
+      "providerState": "i have a list of users",
+      "request": {
+        "method": "GET",
+        "path": "/demo/all",
+        "headers": {
+          "Authorization": "Basic QWRtaW46MTIzNDU="
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "name": "Pranav",
+            "age": 19,
+            "location": "Coimbatore, India",
+            "dob": "2018-01-05"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          },
+          "$.body[0].name": {
+            "match": "type"
+          },
+          "$.body[0].age": {
+            "match": "type"
+          },
+          "$.body[0].location": {
+            "match": "type"
+          },
+          "$.body[0].dob": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

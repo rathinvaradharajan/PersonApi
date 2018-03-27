@@ -4,10 +4,13 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
         classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath("au.com.dius:pact-jvm-provider-gradle_2.11:3.5.0")
+        classpath("com.github.jengelman.gradle.plugins:gradle-processes:0.3.0")
     }
 }
 
@@ -15,6 +18,10 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
+
+apply plugin: 'groovy'
+apply plugin: 'au.com.dius.pact'
+apply plugin: 'com.github.johnrengelman.processes'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -48,6 +55,17 @@ task buildDocker(type: Docker, dependsOn: build) {
         copy {
             from jar
             into '/var/lib/docker'
+        }
+    }
+}
+
+pact {
+    serviceProviders {
+        personapi {
+            port= 8000
+            hasPactWith('personui') {
+                pactFile = file('pacts/personui-personapi.json')
+            }
         }
     }
 }
